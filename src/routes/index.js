@@ -1,7 +1,7 @@
 const express = require('express');
 const studentRoute = require('./students');
-// const teacherRoute = require('./teacher');
-// const courseRoute = require('./course');
+// const teacherRoute = require('./teachers');
+// const courseRoute = require('./courses');
 
 const router = express.Router();
 
