@@ -1,0 +1,10 @@
+Mongoose：
+
+schema 汽车图纸 规定每个document有哪些字段 字段都是什么类型 存到数据库里哪个collection
+const schema = new mongoose。Schema({name: String});
+
+model 汽车模型 通过model生成document
+const Model = mongoose.model('Model', schema);
+
+document 量产的车 mongoose document.save 调用save函数 自动存到数据库里面 
+const document = new Model({name: 'document'});

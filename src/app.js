@@ -3,7 +3,8 @@ const express = require('express');
 const morgan = require('morgan'); // morgan是express默认的日志中间件
 const cors = require('cors');
 
-const router = require('./routes');
+const router = require('./routes');  
+const {connectToDB} = require('./utils/db');
 
 // 监听3000端口
 const PORT = process.env.PORT || 3000; 
@@ -17,6 +18,9 @@ app.use(cors());
 
 app.use (express.json());
 app.use('/api', router)
+
+// 监听之前尝试连接DB
+connectToDB();
 
 // 这里没用Winston 自己写代码要把Winston加上去 winston也是log用的 以前在prac项目里讲过？
 app.listen(PORT, () => {
