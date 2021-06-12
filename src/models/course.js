@@ -32,4 +32,3 @@ module.exports = model('Course', schema);
 // Course model 注册在了mongoose里面 如果之后想要使用到这个model 
 // 方式一： 直接引用这个model 在models/course.js 导出了 在其他地方引入它
 // 方式二： 在mongoose里通过Course名字找到
-
