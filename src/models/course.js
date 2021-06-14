@@ -3,23 +3,35 @@ const {Schema, model} = require('mongoose');
 const schema = new Schema({
     _id:{
         type: String, // 这里写成JS形式 type: 'string' 写成字符串也可以
-        uppercase: true
+        uppercase: true,
+        alias: 'code' //一个副本？快捷方式
     },
     name:{
         type: String,
-        require: true
-
+        required: true
     },
     description:{
         type: String,
         default: 'This is a description.'
     },
+    __v:{
+        type: Number,
+        select: false
+    }
+},{
+    timestamps: true,
+    toJSON:{
+        virtuals : true
+    },
+    id: false
 });
+//virtual属性只存在于用mongoose取数据的时候， 在数据库里是不存在的
 
-schema.virtual('code').get (function(){    //对schema中_id添加虚拟字段code
-    return this._id;
-})
-// 此处没有写成arrow function
+// schema.virtual('code').get (function(){    
+//     return this._id;
+// })
+//对schema中_id添加虚拟字段code  // 实现同样配对__id和code 也可直接在model里加alias
+//   此处没有写成arrow function
 // 是因为里面的this想让它指向实际获取的document
 
 // const courseModel = model('Course', schema);

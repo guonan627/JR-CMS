@@ -4,7 +4,8 @@
   "description": "jr-crm",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "debug": "nodemon --inspect src/app.js"
   },
   "author": "Nan Guo",
   "license": "ISC",
@@ -13,6 +14,8 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "joi": "^17.4.0",
     "mongoose": "^5.12.13",
     "morgan": "^1.10.0"
   },
