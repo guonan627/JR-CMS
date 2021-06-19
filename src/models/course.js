@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose');
 
 const schema = new Schema(
     {
-    _id:{
+    _id:{ 
         type: String, // 这里写成JS形式 type: 'string' 写成字符串也可以
         uppercase: true,
         alias: 'code' //一个副本？快捷方式

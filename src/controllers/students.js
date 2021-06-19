@@ -113,7 +113,10 @@ async function addStudentToCourse(req, res) {
     // check student or course exists
     if (!student || !course) {
         return res.sendStatus(404);
-        // return res.sendStatus(404).json('student or course not found'); 这么写对吗？
+        // return res.sendStatus(404).json('student or course not found'); 这么写对吗？不对
+        // sendStatus是nodejs里的东西，后面不能接东西了。
+        // 要想接东西 用express中间件status， 写成
+        // return res.status(404).json('student or course not found');
     }
 
     // check student is already enrolled 其实在调用mongoose api时候可以避过这个逻辑
@@ -138,7 +141,10 @@ async function addStudentToCourse(req, res) {
 
     // return updated student or return 200/201
     return res.json(student);
-    // return res.sendStatus(201).json(student); 这样写会报错 为什么？
+    // return res.sendStatus(201).json(student); 这样写会报错 为什么?
+    // sendStatus是nodejs里的东西，后面不能接东西了。
+    // 要想接东西 用express中间件status， 写成
+    // return res.status(201).json(student);
 }
 async function removeStudentFromCourse(req, res) {
     const { id, code } = req.params;
