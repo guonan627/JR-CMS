@@ -4,7 +4,9 @@ const {
     getStudentById, 
     updateStudentById, 
     deleteStudentById, 
-    createStudent
+    createStudent,
+    addStudentToCourse,
+    removeStudentFromCourse
 } = require('../controllers/students')
 
 const router = express.Router();
@@ -19,5 +21,8 @@ router.delete('/:id',deleteStudentById);
 // router.delete('/:id',tryCatch(deleteStudentById));
 router.post('/',createStudent);
 // router.post('/',tryCatch(createStudent));
+
+router.post('/:id/courses/:code', addStudentToCourse);
+router.delete('/:id/courses/:code', removeStudentFromCourse);
 
 module.exports = router;

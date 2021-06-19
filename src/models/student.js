@@ -34,7 +34,8 @@ const schema = new Schema({
             },
             msg: 'Invalid email format'
         }
-    }
+    },
+    courses:[{ type: String, ref:'Course'}] // link student and courses 把course添加到student里 同样要在course的model里添加student 此处的Course大小写要与注册Course model时一一对应 见models/course.js中的module.exports = model('Course', schema); 
 });
 
 module.exports = model('Student', schema);

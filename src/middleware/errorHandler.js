@@ -4,12 +4,16 @@ module.exports = (error, req, res, next) => {
     if(error.name === 'ValidationError') {
         if (process.env.NODE_ENV === 'production') {
             // 在生产环境 不需要返回全部信息 只需要把message部分提取出来返回就行 
-            const {details} = error;
-            // const errMsg = details.map(i => i.message); 能work 但和下面的写法有什么区别？
-            const errMsg = details.map((i) => ({
-                message: i.message
-            }));
-            return res.status(400).json(errMsg);
+
+            // object manipulate 算基础的东西 面试日常中经常遇到 告诉你数据长什么样子 帮我对数据做处理 返回我想要的结果
+            // const {details} = error;
+            // // const errMsg = details.map(i => i.message); 能work 但和下面的写法有什么区别？
+            // const errMsg = details.map((i) => ({
+            //     message: i.message
+            // }));
+            // return res.status(400).json(errMsg); 
+
+            return res.status(400).json(error.message); // 也可直接提取error.message
         } else {
             return res.status(400).json(error);
         }

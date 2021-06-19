@@ -1,6 +1,7 @@
 const {Schema, model} = require('mongoose');
 
-const schema = new Schema({
+const schema = new Schema(
+    {
     _id:{
         type: String, // 这里写成JS形式 type: 'string' 写成字符串也可以
         uppercase: true,
@@ -14,6 +15,11 @@ const schema = new Schema({
         type: String,
         default: 'This is a description.'
     },
+    students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],     
+        // link student and course 把student添加到course里 同样要在student的model里添加course 此处的Student大小写要与注册Student model时一一对应 见models/student.js中的module.exports = model('Student', schema); 
+        // 此处type为MongoDB的ObjectId类型 并不是JS自带的 是mongoDB独有的数据类型 
+        // mongoose为了支持MongoDB 想要找到这个类型 就要写成Schema.Types.ObjectId 
+        // 此处ref 的类型上 要根据reference collection 的类型来定 Student是ObjectId类型 此处也写ObjectId
     __v:{
         type: Number,
         select: false

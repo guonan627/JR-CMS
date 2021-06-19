@@ -1,16 +1,19 @@
 const Course = require('../models/course');
+const Student = require('../models/student');
 const joi = require('joi');
 const Joi = require('joi');
+
 
 async function getAllCourses(req, res){
     // db.collection.find() mongodb里这样写
    const courses = await Course.find().exec();
    return res.json(courses);
+   // 这里数据返回的量太大 要考虑做分页
 }
 
 async function getCourseById(req, res){
     const {id} = req.params;
-    const course = await Course.findById(id);
+    const course = await Course.findById(id).populate('students').exec(); // polulate会在他相关联的collection里找到相应的字段挑出来显示
     if(!course) {
         return res.sendStatus(404);
     }
@@ -26,7 +29,7 @@ async function updateCourseById(req, res){
         id, 
         {name, description},
         {new: true}
-    );
+    ).exec();
     if (!course){
         return res.sendStatus(404);
     }
@@ -35,10 +38,27 @@ async function updateCourseById(req, res){
 
 async function deleteCourseById(req, res){
     const { id } = req.params;
-    const course = await Course.findByIdAndDelete(id);
+    const course = await Course.findByIdAndDelete(id).exec();
     if (!course){
         return res.sendStatus(404);
     }
+
+    // 确保删除了该course后， 在对应的ref student collection里的该course也删掉
+    await Student.updateMany(
+        // {
+        //     courses: course._id    // 第一个大括号是搜索条件
+        // }, 
+        // 也可以写成
+        {
+            _id: {$in: course.students }  // 找寻student的id, 看student_id是否在course的students filed里
+        },
+        {
+            $pull :{
+                courses: course._id  //从该student collection里的courses field里面把course._id给pull出来删掉
+             }
+        }
+    );
+
     return res.sendStatus(204);
     // return res.json(course);
 }
@@ -63,9 +83,17 @@ async function createCourse(req, res){
         stripUnknown: true, // 接受后 直接删掉
         abortEarly: false // 默认是true，表示如果检测是发现有一个字段不符合要求就立马返回
     });
-    const course = new Course({_id:code, name, description}); //此处course是document， Course是model， 别写混
+    // 检查新添加的课程是否已经存在数据库， 若已经存在，返回409
+    const existCourse = await Course.findById(code).exec();
+    if(existCourse) {
+        return res.sendStatus(409); // duplicate course code
+    }
+    // 新添加的课程不存在，就创建新的课程
+    const course = new Course({_id:code, name, description}).exec(); //此处existCourse是document， Course是model， 别写混
     // 为什么没写成 const course = new Course({req.body); 
     // 因为不想让别人篡改不能动的字段， 只提供需要添加修改的字段
+
+   
     await course.save();
     return res.status(201).json(course); 
 }
